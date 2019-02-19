@@ -23,6 +23,8 @@ public class JsonUtils {
     public static final String NAME = "name";
     public static final String MAIN_NAME = "mainName";
     public static final String ALSO_KNOWN_AS = "alsoKnownAs";
+    
+    private static final String FALLBACK = "";
 
     public static Sandwich parseSandwichJson(String json) {
         Sandwich sandwich = new Sandwich();
@@ -31,17 +33,21 @@ public class JsonUtils {
             JSONObject sandwichJson = new JSONObject(json);
 
             // get all string JSON properties
-            String placeOfOrigin = sandwichJson.getString(PLACE_OF_ORIGIN);
-            String description = sandwichJson.getString(DESCRIPTION);
-            String imageUrl = sandwichJson.getString(IMAGE);
+            String placeOfOrigin = sandwichJson.optString(PLACE_OF_ORIGIN, FALLBACK);
+            String description = sandwichJson.optString(DESCRIPTION, FALLBACK);
+            String imageUrl = sandwichJson.optString(IMAGE, FALLBACK);
 
             // get all array properties
-            JSONArray ingredients = sandwichJson.getJSONArray(INGREDIENTS);
+            JSONArray ingredients = sandwichJson.optJSONArray(INGREDIENTS);
 
             // get nested properties
-            JSONObject sandwichName = sandwichJson.getJSONObject(NAME);
-            String mainName = sandwichName.getString(MAIN_NAME);
-            JSONArray alsoKnownAs = sandwichName.getJSONArray(ALSO_KNOWN_AS);
+            JSONObject sandwichName = sandwichJson.optJSONObject(NAME);
+            String mainName = "";
+            JSONArray alsoKnownAs = null;
+            if (sandwichName != null) {
+                mainName = sandwichName.optString(MAIN_NAME);
+                alsoKnownAs = sandwichName.optJSONArray(ALSO_KNOWN_AS);
+            }
 
             // populate model
             sandwich.setPlaceOfOrigin(placeOfOrigin);
@@ -67,8 +73,12 @@ public class JsonUtils {
     private static List<String> jsonArrayToList(JSONArray jsonArray) throws JSONException {
         List<String> result = new ArrayList<>();
 
+        if (jsonArray == null) {
+            return result;
+        }
+
         for (int index = 0; index < jsonArray.length(); index++) {
-            result.add(jsonArray.getString(index));
+            result.add(jsonArray.optString(index));
         }
 
         return result;

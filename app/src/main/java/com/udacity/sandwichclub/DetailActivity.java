@@ -20,7 +20,6 @@ public class DetailActivity extends AppCompatActivity {
     // intent handling
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
-    public static final String UNKNOWN = "unknown";
 
     // UI widget references
     private ImageView ingredientsIv;
@@ -79,8 +78,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI() {
-        setTextInTextView(alsoKnownAsTv, TextUtils.join(", ", sandwich.getAlsoKnownAs()));
-        setTextInTextView(descriptionTv, sandwich.getDescription());
+        setTextToTv(alsoKnownAsTv, TextUtils.join(", ", sandwich.getAlsoKnownAs()));
+        setTextToTv(descriptionTv, sandwich.getDescription());
 
         // add listing to text view
         List<String> ingredients = sandwich.getIngredients();
@@ -91,31 +90,31 @@ public class DetailActivity extends AppCompatActivity {
             ingredients.set(0, firstIngredient);
         }
 
-        setTextInTextView(ingredientsTv, TextUtils.join("\n - ", sandwich.getIngredients()));
+        setTextToTv(ingredientsTv, TextUtils.join("\n - ", sandwich.getIngredients()));
 
         // set place of origin
-        String placeOfOrigin = sandwich.getPlaceOfOrigin();
-
-        if (placeOfOrigin == null || placeOfOrigin.equals("")) {
-            placeOfOrigin = UNKNOWN;
-        }
-
-        setTextInTextView(originTv, placeOfOrigin);
+        setTextToTv(originTv, sandwich.getPlaceOfOrigin());
 
         // image
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .placeholder(R.mipmap.ic_placeholder)
+                .error(R.mipmap.ic_launcher)
                 .into(ingredientsIv);
 
         // title (main name)
         setTitle(sandwich.getMainName());
     }
 
-    private void setTextInTextView(TextView tv, String text) {
-        if (text == null || text.equals("")) {
-            tv.setVisibility(View.GONE);
-        } else {
-            tv.setText(text);
+    private void setTextToTv(TextView tv, String input) {
+        if (isNullOrEmpty(input)) {
+            input = getString(R.string.detail_unknown);
         }
+
+        tv.setText(input);
+    }
+
+    private boolean isNullOrEmpty(String s) {
+        return s == null || s.equals("");
     }
 }

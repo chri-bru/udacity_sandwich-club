@@ -25,17 +25,22 @@
                 android:scaleType="centerCrop" />
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_also_known_as_label"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/sandwich_also_known_as"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textStyle="italic"
                 tools:text="Also known as" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Place of Origin"
+                android:text="@string/detail_place_of_origin_label"
                 android:textStyle="bold" />
 
             <TextView
@@ -49,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollHorizontally="false"
-                android:text="Ingredients"
+                android:text="@string/detail_ingredients_label"
                 android:textStyle="bold" />
 
             <TextView
@@ -58,6 +63,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 tools:text="Ingredients" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_description_label"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/sandwich_description"
